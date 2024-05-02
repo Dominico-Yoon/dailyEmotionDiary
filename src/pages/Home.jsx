@@ -1,18 +1,60 @@
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { DiaryStateContext } from "../App";
+
 import Button from "../components/Button";
 import Header from "../components/Header";
+import DiaryList from "../components/DiaryList";
+
+// 헤더에 있는 월에 맞춰 아이템들 필터링
+const getMonthlyData = (pivotDate, data) => {
+  const beginTime = new Date(
+    pivotDate.getFullYear(),
+    pivotDate.getMonth(),
+    1,
+    0,
+    0,
+    0
+  ).getTime();
+
+  const endTime = new Date(
+    pivotDate.getFullYear(),
+    pivotDate.getMonth() + 1,
+    0,
+    23,
+    59,
+    59
+  ).getTime();
+
+  return data.filter(
+    (item) => item.createdDate >= beginTime && item.createdDate <= endTime
+  );
+};
 
 const Home = () => {
+  const data = useContext(DiaryStateContext);
+  const [pivotDate, setPivotDate] = useState(new Date());
+
+  // 헤더의 > 버튼 클릭시 월 증가
+  const onIncreaseMonth = () => {
+    setPivotDate(new Date(pivotDate.getFullYear(), pivotDate.getMonth() + 1));
+  };
+
+  // 헤더의 > 버튼 클릭시 월 감소
+  const onDecreaseMonth = () => {
+    setPivotDate(new Date(pivotDate.getFullYear(), pivotDate.getMonth() - 1));
+  };
+
+  const monthlyData = getMonthlyData(pivotDate, data);
+
   return (
     <div className="Home">
       <Header
-        title={"YYYY-MM-DD"}
-        left_child={<Button text={"<"} />}
-        right_child={<Button text={">"} />}
+        title={`${pivotDate.getFullYear()}년 ${pivotDate.getMonth() + 1}월`}
+        left_child={<Button onClick={onDecreaseMonth} text={"<"} />}
+        right_child={<Button onClick={onIncreaseMonth} text={">"} />}
       />
-      <Link to={"/new"}>새로 만들기</Link>
-      <Link to={"/diary/1"}>일기</Link>
-      <Link to={"/edit/1"}>일기 수정</Link>
+      <DiaryList data={monthlyData} />
     </div>
   );
 };

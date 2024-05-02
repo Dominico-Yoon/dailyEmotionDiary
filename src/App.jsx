@@ -11,15 +11,27 @@ import NotFound from "./pages/NotFound";
 const mockData = [
   {
     id: 1,
-    createdDate: new Date("2024-04-28").getTime(),
+    createdDate: new Date("2024-04-21").getTime(),
     emotionId: 1,
     content: "1번 일기입니다.",
   },
   {
     id: 2,
-    createdDate: new Date("2024-04-29").getTime(),
+    createdDate: new Date("2024-04-28").getTime(),
     emotionId: 2,
     content: "2번 일기입니다.",
+  },
+  {
+    id: 3,
+    createdDate: new Date("2024-04-22").getTime(),
+    emotionId: 4,
+    content: "3번 일기입니다.",
+  },
+  {
+    id: 4,
+    createdDate: new Date("2024-04-29").getTime(),
+    emotionId: 5,
+    content: "4번 일기입니다.",
   },
 ];
 
@@ -49,7 +61,7 @@ export const DiaryDispatchContext = createContext();
 
 function App() {
   const [data, dispatch] = useReducer(reducer, mockData);
-  const idRef = useRef(3);
+  const idRef = useRef(5);
 
   /** 일기 생성 함수
    *

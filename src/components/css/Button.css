@@ -8,12 +8,12 @@
   white-space: nowrap;
 }
 
-.Button .Button_POSITIVE {
+.Button_POSITIVE {
   background-color: rgb(100, 201, 100);
   color: white;
 }
 
-.Button .Button_NEGATIVE {
+.Button_NEGATIVE {
   background-color: rgb(253, 86, 95);
   color: white;
 }
