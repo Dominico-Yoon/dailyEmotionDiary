@@ -8,8 +8,8 @@
 }
 
 .DiaryItem .img_section {
-  min-width: 120px;
-  height: 80px;
+  min-width: 90px;
+  height: 100px;
 
   display: flex;
   justify-content: center;

@@ -1,33 +1,25 @@
 import Header from "../components/Header";
 import Button from "../components/Button";
+import Editor from "../components/Editor";
+import { useContext, useState } from "react";
+import { DiaryDispatchContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 const New = () => {
+  const { onCreate } = useContext(DiaryDispatchContext);
+  const nav = useNavigate();
+
+  const onSubmit = (input) => {
+    onCreate(input.createdDate.getTime(), input.emotionId, input.content);
+    nav("/", { replace: true });
+  };
   return (
     <div className="New">
       <Header
         title={"새 일기 쓰기"}
-        left_child={<Button text={"< 뒤로가기"} />}
+        left_child={<Button onClick={() => nav(-1)} text={"< 뒤로가기"} />}
       />
-      <div>
-        <section>
-          <h4>오늘은 언제인가요?</h4>
-          <input type="date" />
-        </section>
-
-        <section>
-          <h4>오늘의 감정</h4>
-          <div>emotion Button</div>
-        </section>
-
-        <section>
-          <h4>오늘의 일기</h4>
-          <textarea placeholder="오늘은 어땟나요?" />
-        </section>
-      </div>
-      <div>
-        <Button text={"취소하기"} />
-        <Button text={"작성완료"} type={"POSITIVE"} />
-      </div>
+      <Editor onSubmit={onSubmit} />
     </div>
   );
 };
