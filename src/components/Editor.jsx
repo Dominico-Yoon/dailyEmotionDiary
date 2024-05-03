@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getStringedDate } from "../utils/getStringedDate";
 import { emotionList } from "../utils/constants";
@@ -7,7 +7,7 @@ import "./css/Editor.css";
 import Button from "./Button";
 import EmotionItems from "./EmotionItems";
 
-const Editor = ({ onSubmit }) => {
+const Editor = ({ curDiaryItem, onSubmit }) => {
   const nav = useNavigate();
 
   const [input, setInput] = useState({
@@ -15,6 +15,15 @@ const Editor = ({ onSubmit }) => {
     emotionId: 3,
     content: "",
   });
+
+  useEffect(() => {
+    if (curDiaryItem) {
+      setInput({
+        ...curDiaryItem,
+        createdDate: new Date(curDiaryItem.createdDate),
+      });
+    }
+  }, [curDiaryItem]);
 
   const onChangeInput = (e) => {
     let name = e.target.name;
