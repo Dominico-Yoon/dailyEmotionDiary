@@ -7,22 +7,20 @@ const DiaryItem = ({ id, createdDate, emotionId, content }) => {
   const nav = useNavigate();
   return (
     <div className="DiaryItem">
-      <section className="emotion_wrapper">
+      <section onClick={() => nav(`/diary/${id}`)} className="emotion_wrapper">
         <img
           className={`img_section img_section_${emotionId}`}
           src={getEmotionImage(emotionId)}
         />
       </section>
-      <section className="content_wrapper">
-        <div onClick={() => nav(`/diary/:${id}`)} className="createdDate">
+      <section onClick={() => nav(`/diary/${id}`)} className="content_wrapper">
+        <div className="createdDate">
           {new Date(createdDate).toLocaleDateString()}
         </div>
-        <div onClick={() => nav(`/diary/:${id}`)} className="content">
-          {content}
-        </div>
+        <div className="content">{content}</div>
       </section>
       <section className="button">
-        <Button onClick={() => nav(`/edit/:${id}`)} text={"수정하기"} />
+        <Button onClick={() => nav(`/edit/${id}`)} text={"수정하기"} />
       </section>
     </div>
   );
