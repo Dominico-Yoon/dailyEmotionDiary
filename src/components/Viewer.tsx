@@ -2,8 +2,15 @@ import { emotionList } from "../utils/constants";
 import { getEmotionImage } from "../utils/get-emotion-image";
 import "./css/Viewer.css";
 
-const Viewer = ({ emotionId, content }) => {
+interface Props {
+  emotionId: number;
+  content: string;
+}
+
+const Viewer = ({ emotionId, content }: Props) => {
   const emotionItem = emotionList.find((item) => item.emotionId === emotionId);
+  if (emotionItem === undefined)
+    throw new Error("emotionItem이 잘못 되었습니다.");
   return (
     <div className="Viewer">
       <section>

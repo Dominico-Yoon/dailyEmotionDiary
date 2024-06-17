@@ -1,10 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import { DiaryStateContext } from "../App";
+import { DiaryStateContext, useDiaryState } from "../App";
 import { useNavigate } from "react-router-dom";
+import { DiaryType } from "../types";
 
-const useDiary = (id) => {
-  const data = useContext(DiaryStateContext);
-  const [curDiaryItem, setCurDiaryItem] = useState();
+const useDiary = (id: number) => {
+  // const data = useContext(DiaryStateContext);
+  const data = useDiaryState();
+  const [curDiaryItem, setCurDiaryItem] = useState<DiaryType | undefined>(
+    undefined
+  );
   const nav = useNavigate();
 
   useEffect(() => {
