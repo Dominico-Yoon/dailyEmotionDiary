@@ -1,14 +1,15 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import { DiaryStateContext } from "../App";
+import { DiaryStateContext, useDiaryState } from "../App";
 
 import Button from "../components/Button";
 import Header from "../components/Header";
 import DiaryList from "../components/DiaryList";
 import usePageTitle from "../hooks/usePageTitle";
+import { DiaryType } from "../types";
 
 // 헤더에 있는 월에 맞춰 아이템들 필터링
-const getMonthlyData = (pivotDate, data) => {
+const getMonthlyData = (pivotDate: Date, data: DiaryType[]) => {
   const beginTime = new Date(
     pivotDate.getFullYear(),
     pivotDate.getMonth(),
@@ -27,13 +28,16 @@ const getMonthlyData = (pivotDate, data) => {
     59
   ).getTime();
 
-  return data.filter(
-    (item) => item.createdDate >= beginTime && item.createdDate <= endTime
-  );
+  return data.filter((item) => {
+    // item.createdDate >= beginTime && item.createdDate <= endTime
+    const itemDate = new Date(item.createdDate).getTime();
+    return itemDate >= beginTime && itemDate <= endTime;
+  });
 };
 
 const Home = () => {
-  const data = useContext(DiaryStateContext);
+  // const data = useContext(DiaryStateContext);
+  const data = useDiaryState();
   const [pivotDate, setPivotDate] = useState(new Date());
   usePageTitle("감정 일기장");
 

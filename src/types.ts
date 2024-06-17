@@ -1,4 +1,4 @@
-export interface Dairy {
+export interface DiaryType {
   id: number;
   createdDate: string;
   emotionId: number;

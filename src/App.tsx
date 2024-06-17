@@ -1,4 +1,13 @@
-import { useReducer, useRef, createContext, useEffect, useState } from "react";
+import {
+  useReducer,
+  useRef,
+  createContext,
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  useContext,
+} from "react";
 import { Routes, Route } from "react-router-dom";
 
 import "./App.css";
@@ -7,7 +16,7 @@ import New from "./pages/New";
 import Diary from "./pages/Diary";
 import Edit from "./pages/Edit";
 import NotFound from "./pages/NotFound";
-import { Dairy } from "./types";
+import { DiaryType } from "./types";
 
 type Action =
   | {
@@ -29,10 +38,10 @@ type Action =
       };
     }
   | { type: "DELETE"; id: number }
-  | { type: "INIT"; data: Dairy[] };
+  | { type: "INIT"; data: DiaryType[] };
 
 // state 대신 reducer 사용
-function reducer(state: Dairy[], action: Action): Dairy[] {
+function reducer(state: DiaryType[], action: Action): DiaryType[] {
   let nextState;
 
   switch (action.type) {
@@ -65,7 +74,7 @@ function reducer(state: Dairy[], action: Action): Dairy[] {
   return nextState;
 }
 
-export const DiaryStateContext = createContext<Dairy[] | null>(null);
+export const DiaryStateContext = createContext<DiaryType[] | null>(null);
 export const DiaryDispatchContext = createContext<{
   onCreate: (createdDate: string, emotionId: number, content: string) => void;
   onUpdate: (
@@ -76,6 +85,20 @@ export const DiaryDispatchContext = createContext<{
   ) => void;
   onDelete: (targetId: number) => void;
 } | null>(null);
+
+export function useDiaryState() {
+  const state = useContext(DiaryStateContext);
+
+  if (!state) throw new Error("Diary State에 문제 발생!!!");
+  return state;
+}
+
+export function useDiaryDispatch() {
+  const dispatch = useContext(DiaryDispatchContext);
+
+  if (!dispatch) throw new Error("Diary Dispatch에 문제 발생!!!");
+  return dispatch;
+}
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -119,21 +142,20 @@ function App() {
    * @param {오늘의 감정} emotionId
    * @param {일기 내용} content
    */
-  const onCreate = (
-    createdDate: string,
-    emotionId: number,
-    content: string
-  ) => {
-    dispatch({
-      type: "CREATE",
-      data: {
-        id: idRef.current++,
-        createdDate,
-        emotionId,
-        content,
-      },
-    });
-  };
+  const onCreate = useCallback(
+    (createdDate: string, emotionId: number, content: string) => {
+      dispatch({
+        type: "CREATE",
+        data: {
+          id: idRef.current++,
+          createdDate,
+          emotionId,
+          content,
+        },
+      });
+    },
+    []
+  );
 
   /** 일기 수정 함수
    *
@@ -142,33 +164,36 @@ function App() {
    * @param {오늘의 감정} emotionId
    * @param {일기 내용} content
    */
-  const onUpdate = (
-    id: number,
-    createdDate: string,
-    emotionId: number,
-    content: string
-  ) => {
-    dispatch({
-      type: "UPDATE",
-      data: {
-        id,
-        createdDate,
-        emotionId,
-        content,
-      },
-    });
-  };
+  const onUpdate = useCallback(
+    (id: number, createdDate: string, emotionId: number, content: string) => {
+      dispatch({
+        type: "UPDATE",
+        data: {
+          id,
+          createdDate,
+          emotionId,
+          content,
+        },
+      });
+    },
+    []
+  );
 
   /** 일기 삭제 함수
    *
    * @param {일기 ID} id
    */
-  const onDelete = (id: number) => {
+  const onDelete = useCallback((id: number) => {
     dispatch({
       type: "DELETE",
       id,
     });
-  };
+  }, []);
+
+  // 변하지 않는 함수들은 Memo를 통하여 한번만 렌더링 되게 끔 최적화
+  const memoizedDispatch = useMemo(() => {
+    return { onCreate, onUpdate, onDelete };
+  }, []);
 
   // TEST용
   //   <Button
@@ -191,7 +216,7 @@ function App() {
   return (
     <>
       <DiaryStateContext.Provider value={data}>
-        <DiaryDispatchContext.Provider value={{ onCreate, onUpdate, onDelete }}>
+        <DiaryDispatchContext.Provider value={memoizedDispatch}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/new" element={<New />} />
