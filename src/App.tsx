@@ -7,9 +7,32 @@ import New from "./pages/New";
 import Diary from "./pages/Diary";
 import Edit from "./pages/Edit";
 import NotFound from "./pages/NotFound";
+import { Dairy } from "./types";
+
+type Action =
+  | {
+      type: "CREATE";
+      data: {
+        id: number;
+        createdDate: string;
+        emotionId: number;
+        content: string;
+      };
+    }
+  | {
+      type: "UPDATE";
+      data: {
+        id: number;
+        createdDate: string;
+        emotionId: number;
+        content: string;
+      };
+    }
+  | { type: "DELETE"; id: number }
+  | { type: "INIT"; data: Dairy[] };
 
 // state 대신 reducer 사용
-function reducer(state, action) {
+function reducer(state: Dairy[], action: Action): Dairy[] {
   let nextState;
 
   switch (action.type) {
@@ -20,15 +43,13 @@ function reducer(state, action) {
 
     case "UPDATE": {
       nextState = state.map((item) =>
-        String(item.id) === String(action.data.targetId) ? action.data : item
+        String(item.id) === String(action.data.id) ? action.data : item
       );
       break;
     }
 
     case "DELETE": {
-      nextState = state.filter(
-        (item) => String(item.id) !== String(action.targetId)
-      );
+      nextState = state.filter((item) => String(item.id) !== String(action.id));
       break;
     }
 
@@ -44,8 +65,17 @@ function reducer(state, action) {
   return nextState;
 }
 
-export const DiaryStateContext = createContext();
-export const DiaryDispatchContext = createContext();
+export const DiaryStateContext = createContext<Dairy[] | null>(null);
+export const DiaryDispatchContext = createContext<{
+  onCreate: (createdDate: string, emotionId: number, content: string) => void;
+  onUpdate: (
+    targetId: number,
+    createdDate: string,
+    emotionId: number,
+    content: string
+  ) => void;
+  onDelete: (targetId: number) => void;
+} | null>(null);
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -89,7 +119,11 @@ function App() {
    * @param {오늘의 감정} emotionId
    * @param {일기 내용} content
    */
-  const onCreate = (createdDate, emotionId, content) => {
+  const onCreate = (
+    createdDate: string,
+    emotionId: number,
+    content: string
+  ) => {
     dispatch({
       type: "CREATE",
       data: {
@@ -108,11 +142,16 @@ function App() {
    * @param {오늘의 감정} emotionId
    * @param {일기 내용} content
    */
-  const onUpdate = (targetId, createdDate, emotionId, content) => {
+  const onUpdate = (
+    id: number,
+    createdDate: string,
+    emotionId: number,
+    content: string
+  ) => {
     dispatch({
       type: "UPDATE",
       data: {
-        targetId,
+        id,
         createdDate,
         emotionId,
         content,
@@ -124,10 +163,10 @@ function App() {
    *
    * @param {일기 ID} id
    */
-  const onDelete = (targetId) => {
+  const onDelete = (id: number) => {
     dispatch({
       type: "DELETE",
-      targetId,
+      id,
     });
   };
 
