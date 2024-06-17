@@ -5,7 +5,99 @@
 
 > 개인 미니 프로젝트로 진행한 Daily Emotion Diary App 입니다.
 > 
+> 2024.06.17 업데이트 JavaScript -> TypeScript로 마이그레이션 (고도화)
+> 이전 Version Git - https://github.com/Dominico-Yoon/dailyEmotionDiary
+>
+> 업데이트 내용
+> 페이지 별 Commit 확인
+>
+> 20240617_1055
+    * typescript 라이브러리 추가 설치
+    * main, app 타입스크립트 마이그레이션 진행 완료
+
 > 
+> 
+20240617_1125
+1. App 수정
+    * useDiaryState() / useDiaryDispatch() 커스텀훅 추가
+    * useCallback, useMemo 추가로 최적화 진행
+
+2. Dairy.ts 수정
+    * 오타로 및 중복된 이름이여서 DiaryType으로 수정
+
+3. Home Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * getMonthlyData 함수의 매개변수 타입 지정 -> item의 속성이 계산이 불가능 하기 때문에 itemDate 변수 선언
+    * context사용 시, null 타입이 들어올 수 있기 때문에 커스텀 훅 만들어서 사용
+
+4. Header Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * 타입을 생성 후 매개변수 props로 설정 후 타입 선언
+
+5. Button Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * interface 생성 -> type 속성은 값이 안들어 올 수 있기때문에 옵셔널로 설정
+    * 생성한 타입으로 매개변수에 타입 선언
+
+6. DiaryList Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * 부모노드에서 넘어오는 값들을 props로 설정
+    * 각 이벤트 함수의 매개변수 e에 타입 선언
+    * getSortedData 함수의 매개변수로 받아오는 item은 tosorted() 메서드 사용 불가함으로 메서드 수정
+
+7. DiaryItem Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * props로 받아오는 매개변수에 타입 선언
+
+> 
+> 
+20240617_1715
+1. App 수정
+    * TEST시 createdDate가 string일 경우 새 일기 쓰기가 정상 작동하지 않아 number로 교체
+
+2. types.ts 수정
+    * TEST시 createdDate가 string일 경우 새 일기 쓰기가 정상 작동하지 않아 number로 교체
+
+3. New Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * context사용 시, null 타입이 들어올 수 있기 때문에 커스텀 훅 만들어서 사용
+    * onSubmit 함수에 createdDate가 number 타입이여야 하므로 getTime() 메서드 사용
+
+4. Header Components 수정
+    * Props 타입에 left_child, right_child가 들어가지 않을 수도 있어 옵셔널(?) 적용
+
+5. Editor Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * interface 생성 -> curDiaryItem 속성은 값이 안들어 올 수 있기때문에 옵셔널로 설정
+    * 각 이벤트 함수에 맞는 매개변수 e 타입 선언
+
+6. EmotionItems Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+
+>
+> 20240617_1742
+1. Diary Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+
+2. usePageTitle custom hook 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * 매개변수에 타입 선언
+
+3. useDiary custom hook 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * 매개변수에 타입 선언
+    * context사용 시, null 타입이 들어올 수 있기 때문에 커스텀 훅 만들어서 사용
+
+4. Veiwer Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * 부모노드에서 넘어오는 값들을 props로 설정
+
+>
+> 20240617_2041
+1. Edit Components 수정
+    * 확장자 .jsx에서 .tsx로 수정
+    * context사용 시, null 타입이 들어올 수 있기 때문에 커스텀 훅 만들어서 사용
+    * params.id는 string 타입을 갖고 있기 때문에 커스텀 훅인 useDiary에서 사용 불가 -> 조건식을 추가하여 number 타입이 되게끔 수정
 
 ### 목차
 
