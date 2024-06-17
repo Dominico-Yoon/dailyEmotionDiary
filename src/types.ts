@@ -1,6 +1,6 @@
 export interface DiaryType {
-  id: number;
-  createdDate: string;
+  id?: number;
+  createdDate: number;
   emotionId: number;
   content: string;
 }

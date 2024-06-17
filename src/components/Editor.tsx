@@ -6,8 +6,14 @@ import { emotionList } from "../utils/constants";
 import "./css/Editor.css";
 import Button from "./Button";
 import EmotionItems from "./EmotionItems";
+import { DiaryType } from "../types";
 
-const Editor = ({ curDiaryItem, onSubmit }) => {
+interface Props {
+  curDiaryItem?: DiaryType;
+  onSubmit: (input: DiaryType) => void;
+}
+
+const Editor = ({ curDiaryItem, onSubmit }: Props) => {
   const nav = useNavigate();
 
   const [input, setInput] = useState({
@@ -25,9 +31,12 @@ const Editor = ({ curDiaryItem, onSubmit }) => {
     }
   }, [curDiaryItem]);
 
-  const onChangeInput = (e) => {
-    let name = e.target.name;
-    let value = e.target.value;
+  const onChangeInput = (
+    e:
+      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | { target: { name: string; value: string | number | Date } }
+  ) => {
+    let { name, value } = e.target;
 
     if (name === "createdDate") {
       value = new Date(value);
@@ -40,7 +49,12 @@ const Editor = ({ curDiaryItem, onSubmit }) => {
   };
 
   const onClickSubmit = () => {
-    onSubmit(input);
+    // input을 DiaryType에 맞게 변환하여 onSubmit에 전달
+    const formattedInput: DiaryType = {
+      ...input,
+      createdDate: input.createdDate.getTime(),
+    };
+    onSubmit(formattedInput);
   };
 
   return (

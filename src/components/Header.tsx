@@ -3,8 +3,8 @@ import "./css/Header.css";
 
 interface Props {
   title: string;
-  left_child: ReactElement;
-  right_child: ReactElement;
+  left_child?: ReactElement;
+  right_child?: ReactElement;
 }
 
 const Header = (props: Props) => {

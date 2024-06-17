@@ -23,7 +23,7 @@ type Action =
       type: "CREATE";
       data: {
         id: number;
-        createdDate: string;
+        createdDate: number;
         emotionId: number;
         content: string;
       };
@@ -32,7 +32,7 @@ type Action =
       type: "UPDATE";
       data: {
         id: number;
-        createdDate: string;
+        createdDate: number;
         emotionId: number;
         content: string;
       };
@@ -76,10 +76,10 @@ function reducer(state: DiaryType[], action: Action): DiaryType[] {
 
 export const DiaryStateContext = createContext<DiaryType[] | null>(null);
 export const DiaryDispatchContext = createContext<{
-  onCreate: (createdDate: string, emotionId: number, content: string) => void;
+  onCreate: (createdDate: number, emotionId: number, content: string) => void;
   onUpdate: (
     targetId: number,
-    createdDate: string,
+    createdDate: number,
     emotionId: number,
     content: string
   ) => void;
@@ -143,7 +143,7 @@ function App() {
    * @param {일기 내용} content
    */
   const onCreate = useCallback(
-    (createdDate: string, emotionId: number, content: string) => {
+    (createdDate: number, emotionId: number, content: string) => {
       dispatch({
         type: "CREATE",
         data: {
@@ -165,7 +165,7 @@ function App() {
    * @param {일기 내용} content
    */
   const onUpdate = useCallback(
-    (id: number, createdDate: string, emotionId: number, content: string) => {
+    (id: number, createdDate: number, emotionId: number, content: string) => {
       dispatch({
         type: "UPDATE",
         data: {
